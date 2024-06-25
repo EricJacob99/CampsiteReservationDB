@@ -1,5 +1,6 @@
 package com.techelevator.dao;
 
+import com.techelevator.model.Campground;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,6 +10,7 @@ import com.techelevator.model.Reservation;
 import java.time.LocalDate;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class JdbcReservationDaoTests extends BaseDaoTests {
 
@@ -21,7 +23,10 @@ public class JdbcReservationDaoTests extends BaseDaoTests {
 
     @Test
     public void getReservationById_Should_Return_Specific_Reservation() {
-        Assert.fail();
+        Reservation reservation = dao.getReservationById(1);
+
+        assertNotNull("Returned reservation should not be null", reservation);
+        assertEquals("Incorrect reservation returned for ID 1", 1, reservation.getReservationId());
     }
 
     @Test
