@@ -1,6 +1,9 @@
 package com.techelevator.dao;
 
+import com.techelevator.exception.DaoException;
+import com.techelevator.model.Campground;
 import com.techelevator.model.Park;
+import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 
@@ -18,7 +21,19 @@ public class JdbcParkDao implements ParkDao {
 
     @Override
     public List<Park> getParks() {
-        return new ArrayList<>();
+        List<Park> parks = new ArrayList<>();
+        String sql = "SELECT location, park_id, name, establish_date, area, visitors, description " +
+                "FROM park " +
+                "ORDER BY name;";
+        try {
+            SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
+            while (results.next()) {
+                parks.add(mapRowToPark(results));
+            }
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        }
+        return parks;
     }
 
     private Park mapRowToPark(SqlRowSet results) {
